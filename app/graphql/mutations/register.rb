@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 module Mutations
   class Register < BaseMutation
     class AuthProviderSignupData < Types::BaseInputObject
       argument :credentials, Types::AuthProviderCredentialsInput, required: false
     end
 
+    argument :auth_provider, AuthProviderSignupData, required: false
     argument :first_name, String, required: true
     argument :last_name, String, required: true
-    argument :auth_provider, AuthProviderSignupData, required: false
 
     type Types::UserType
 

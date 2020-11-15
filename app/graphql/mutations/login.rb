@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Mutations
   class Login < BaseMutation
     null true
@@ -17,7 +19,7 @@ module Mutations
 
       # use Ruby on Rails - ActiveSupport::MessageEncryptor, to build a token
       crypt = ActiveSupport::MessageEncryptor.new(Rails.application.credentials.secret_key_base.byteslice(0..31))
-      token = crypt.encrypt_and_sign("user-id:#{ user.id }")
+      token = crypt.encrypt_and_sign("user-id:#{user.id}")
 
       { user: user, token: token }
     end

@@ -65,6 +65,7 @@ AllCops:
     - "tmp/**/*"
     - "vendor/**/*"
     - ".git/**/*"
+    - 'bin/bundle'
   # Default formatter will be used if no `-f/--format` option is given.
   DefaultFormatter: progress
   # Cop names are displayed in offense messages by default. Change behavior
@@ -2363,7 +2364,7 @@ Naming/MethodParameterName:
   VersionAdded: "0.53"
   VersionChanged: "0.77"
   # Parameter names may be equal to or greater than this value
-  MinNameLength: 3
+  MinNameLength: 1
   AllowNamesEndingInNumbers: true
   # Allowed names that will not register an offense
   AllowedNames:
@@ -2997,23 +2998,6 @@ Style/DocumentDynamicEvalDefinition:
   StyleGuide: "#eval-comment-docs"
   Enabled: pending
   VersionAdded: "1.1"
-
-Style/Documentation:
-  Description: "Document classes and non-namespace modules."
-  Enabled: true
-  VersionAdded: "0.9"
-  Exclude:
-    - "spec/**/*"
-    - "test/**/*"
-
-Style/DocumentationMethod:
-  Description: "Checks for missing documentation comment for public methods."
-  Enabled: false
-  VersionAdded: "0.43"
-  Exclude:
-    - "spec/**/*"
-    - "test/**/*"
-  RequireForNonPublicMethods: false
 
 Style/DoubleCopDisableDirective:
   Description: "Checks for double rubocop:disable comments on a single line."

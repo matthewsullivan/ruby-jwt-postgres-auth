@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Types
   class AuthProviderCredentialsInput < BaseInputObject
     # the name is usually inferred by class name but can be overwritten
