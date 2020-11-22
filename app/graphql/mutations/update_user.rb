@@ -2,23 +2,13 @@
 
 module Mutations
   class UpdateUser < BaseMutation
-    argument :credentials, Types::AuthProviderCredentialsInput, required: false
-    argument :first_name, String, required: false
-    argument :last_name, String, required: false
-    argument :email, String, required: false
-
+    argument :arguments, Types::UpdateUserAttributes, required: true
     field :user, Types::UserType, null: true
 
-    def resolve(credentials: credentials, first_name: first_name, last_name: last_name, email:email)
-      return unless context[:current_user]
+    def resolve(arguments:)
       current_user = context[:current_user]
-
-      current_user.update(
-        first_name: first_name,
-        last_name: last_name,
-        email: credentials[:email],
-        password: credentials[:password]
-      )
+      return unless current_user
+      current_user.update!(arguments.to_hash)
 
       { user: current_user }
     end
