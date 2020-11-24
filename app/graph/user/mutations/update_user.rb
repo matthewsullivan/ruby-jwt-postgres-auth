@@ -11,6 +11,8 @@ module User::Mutations
 
       current_user.update!(arguments.to_hash)
 
+      current_user.update!(arguments.to_hash)
+
       { user: current_user }
     end
   end
