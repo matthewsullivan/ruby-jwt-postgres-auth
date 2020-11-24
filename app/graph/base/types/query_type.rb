@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module Types
-  class QueryType < Types::BaseObject
+module Base::Types
+  class QueryType < Base::Types::BaseObject
     # Add root-level fields here.
     # They will be entry points for queries on your schema.
 

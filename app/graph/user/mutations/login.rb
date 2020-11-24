@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-module Mutations
-  class Login < BaseMutation
+module User::Mutations
+  class Login < Base::Mutations::BaseMutation
     null true
 
-    argument :credentials, Types::AuthProviderCredentialsInput, required: false
+    argument :credentials, Authentication::Types::Input::AuthProviderCredentialsInput, required: false
 
     field :token, String, null: true
-    field :user, Types::UserType, null: true
+    field :user, User::Types::UserType, null: true
 
     def resolve(credentials: nil)
       return unless credentials

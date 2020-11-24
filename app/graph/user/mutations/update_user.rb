@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-module Mutations
-  class UpdateUser < BaseMutation
-    argument :arguments, Types::UpdateUserAttributes, required: true
-    field :user, Types::UserType, null: true
+module User::Mutations
+  class UpdateUser < Base::Mutations::BaseMutation
+    argument :arguments, User::Types::Input::UpdateUser, required: true
+    field :user, User::Types::UserType, null: true
 
     def resolve(arguments:)
       current_user = context[:current_user]

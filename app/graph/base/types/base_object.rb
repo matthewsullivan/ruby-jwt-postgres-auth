@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module Types
+module Base::Types
   class BaseObject < GraphQL::Schema::Object
-    field_class Types::BaseField
+    field_class Base::Types::BaseField
   end
 end

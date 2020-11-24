@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-module Mutations
-  class Register < BaseMutation
-    class AuthProviderSignupData < Types::BaseInputObject
-      argument :credentials, Types::AuthProviderCredentialsInput, required: false
+module Authentication::Mutations
+  class Register < Base::Mutations::BaseMutation
+    class AuthProviderSignupData < Base::Types::BaseInputObject
+      argument :credentials, Authentication::Types::Input::AuthProviderCredentialsInput, required: false
     end
 
     argument :auth_provider, AuthProviderSignupData, required: false
     argument :first_name, String, required: true
     argument :last_name, String, required: true
 
-    type Types::UserType
+    type User::Types::UserType
 
     def resolve(first_name: nil, last_name: nil, auth_provider: nil)
       User.create!(
