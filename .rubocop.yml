@@ -2757,7 +2757,7 @@ Style/ClassAndModuleChildren:
   # have the knowledge to perform either operation safely and thus requires
   # manual oversight.
   SafeAutoCorrect: false
-  Enabled: true
+  Enabled: false
   VersionAdded: "0.19"
   #
   # Basically there are two different styles:
@@ -2773,7 +2773,7 @@ Style/ClassAndModuleChildren:
   #   end
   #
   # The compact style is only forced, for classes or modules with one child.
-  EnforcedStyle: nested
+  EnforcedStyle: compact
   SupportedStyles:
     - nested
     - compact

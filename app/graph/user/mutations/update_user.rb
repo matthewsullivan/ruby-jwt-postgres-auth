@@ -8,6 +8,7 @@ module User::Mutations
     def resolve(arguments:)
       current_user = context[:current_user]
       return unless current_user
+
       current_user.update!(arguments.to_hash)
 
       { user: current_user }

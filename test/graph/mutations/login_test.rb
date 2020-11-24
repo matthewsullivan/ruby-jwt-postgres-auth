@@ -16,7 +16,7 @@ module Mutations
     end
 
     def perform(args = {})
-      Mutations::Login.new(object: nil, field: nil, context: { session: {} }).resolve(args)
+      User::Mutations::Login.new(object: nil, field: nil, context: { session: {} }).resolve(args)
     end
 
     test 'should login with valid credentails' do

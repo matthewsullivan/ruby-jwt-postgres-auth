@@ -25,7 +25,7 @@ module Mutations
     end
 
     def perform(args = {})
-      Mutations::Register.new(object: nil, field: nil, context: {}).resolve(args)
+      Authentication::Mutations::Register.new(object: nil, field: nil, context: {}).resolve(args)
     end
 
     test 'should register valid user' do
