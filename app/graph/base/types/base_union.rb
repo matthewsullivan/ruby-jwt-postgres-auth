@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-module Base::Types
-  class BaseUnion < GraphQL::Schema::Union
+module Base
+  module Types
+    class BaseUnion < GraphQL::Schema::Union
+    end
   end
 end

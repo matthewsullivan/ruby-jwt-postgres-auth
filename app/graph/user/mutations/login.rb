@@ -1,29 +1,31 @@
 # frozen_string_literal: true
 
-module User::Mutations
-  class Login < Base::Mutations::BaseMutation
-    null true
+module User
+  module Mutations
+    class Login < Base::Mutations::BaseMutation
+      null true
 
-    argument :credentials, Authentication::Types::Input::AuthProviderCredentialsInput, required: false
+      argument :credentials, Authentication::Types::Input::AuthProviderCredentialsInput, required: false
 
-    field :token, String, null: true
-    field :user, User::Types::UserType, null: true
+      field :token, String, null: true
+      field :user, User::Types::UserType, null: true
 
-    def resolve(credentials: nil)
-      return unless credentials
+      def resolve(credentials: nil)
+        return unless credentials
 
-      user = User.find_by email: credentials[:email]
+        user = User.find_by email: credentials[:email]
 
-      return unless user
-      return unless user.authenticate(credentials[:password])
+        return unless user
+        return unless user.authenticate(credentials[:password])
 
-      # use Ruby on Rails - ActiveSupport::MessageEncryptor, to build a token
-      crypt = ActiveSupport::MessageEncryptor.new(Rails.application.credentials.secret_key_base.byteslice(0..31))
-      token = crypt.encrypt_and_sign("user-id:#{user.id}")
+        # use Ruby on Rails - ActiveSupport::MessageEncryptor, to build a token
+        crypt = ActiveSupport::MessageEncryptor.new(Rails.application.credentials.secret_key_base.byteslice(0..31))
+        token = crypt.encrypt_and_sign("user-id:#{user.id}")
 
-      context[:session][:token] = token
+        context[:session][:token] = token
 
-      { user: user, token: token }
+        { user: user, token: token }
+      end
     end
   end
 end
