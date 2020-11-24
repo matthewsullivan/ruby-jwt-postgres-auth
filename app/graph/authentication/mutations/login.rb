@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module User::Mutations
+module Authentication::Mutations
   class Login < Base::Mutations::BaseMutation
     null true
 
