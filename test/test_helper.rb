@@ -12,6 +12,14 @@ module ActiveSupport
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
 
-    # Add more helper methods to be used by all tests here...
+    def login_as(user)
+      args = {
+        credentials: {
+          email: user.email,
+          password: user.password_digest
+        }
+      }
+      Authentication::Mutations::Login.new(object: nil, field: nil, context: {}).resolve(args)
+    end
   end
 end
