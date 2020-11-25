@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module User::Mutations
-  class User::Mutations::Register < Base::Mutations::BaseMutation
+  class Register < Base::Mutations::BaseMutation
     class AuthProviderSignupData < Base::Types::BaseInputObject
       argument :credentials, Authentication::Types::Input::AuthProviderCredentialsInput, required: false
     end
