@@ -19,7 +19,7 @@ module ActiveSupport
           password: user.password_digest
         }
       }
-      Authentication::Mutations::Login.new(object: nil, field: nil, context: {}).resolve(args)
+      Authentication::Mutations::Login.new(object: nil, field: nil, context: { session: {} }).resolve(args)
     end
   end
 end
