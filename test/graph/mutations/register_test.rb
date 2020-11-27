@@ -4,12 +4,14 @@ require 'test_helper'
 
 module Mutations
   class RegisterTest < ActiveSupport::TestCase
-    user = {
-      first_name: 'Taylor',
-      last_name: 'Doe',
-      email: 'taylordoe@localhost.com',
-      password: '(a1B2c3D4e5F6g)'
-    }
+    def setup
+      @user = {
+        first_name: 'Taylor',
+        last_name: 'Doe',
+        email: 'taylordoe@localhost.com',
+        password: '(a1B2c3D4e5F6g)'
+      }
+    end
 
     def build_args(user)
       {
@@ -29,19 +31,19 @@ module Mutations
     end
 
     test 'should register valid user' do
-      args = build_args(user)
+      args = build_args(@user)
       result = perform(args)
 
       assert result.persisted?
-      assert_equal result.first_name, user[:first_name]
-      assert_equal result.last_name, user[:last_name]
-      assert_equal result.email, user[:email]
+      assert_equal result.first_name, @user[:first_name]
+      assert_equal result.last_name, @user[:last_name]
+      assert_equal result.email, @user[:email]
     end
 
     test 'should not register without first name' do
       exception = assert_raises ActiveRecord::RecordInvalid do
-        user[:first_name] = ''
-        args = build_args(user)
+        @user[:first_name] = ''
+        args = build_args(@user)
         perform(args)
       end
 
@@ -50,8 +52,8 @@ module Mutations
 
     test 'should not register without last name' do
       exception = assert_raises ActiveRecord::RecordInvalid do
-        user[:last_name] = ''
-        args = build_args(user)
+        @user[:last_name] = ''
+        args = build_args(@user)
         perform(args)
       end
 
@@ -60,8 +62,8 @@ module Mutations
 
     test 'should not register without email' do
       exception = assert_raises ActiveRecord::RecordInvalid do
-        user[:email] = ''
-        args = build_args(user)
+        @user[:email] = ''
+        args = build_args(@user)
         perform(args)
       end
 
@@ -70,8 +72,8 @@ module Mutations
 
     test 'should not register without password' do
       exception = assert_raises ActiveRecord::RecordInvalid do
-        user[:password] = ''
-        args = build_args(user)
+        @user[:password] = ''
+        args = build_args(@user)
         perform(args)
       end
 
@@ -80,8 +82,8 @@ module Mutations
 
     test 'should not register with duplicate email' do
       exception = assert_raises ActiveRecord::RecordInvalid do
-        user[:email] = 'johndoe@localhost.com'
-        args = build_args(user)
+        @user[:email] = 'johndoe@localhost.com'
+        args = build_args(@user)
         perform(args)
       end
 
