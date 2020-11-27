@@ -3,9 +3,14 @@
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 require 'rails/test_help'
+require 'helpers/password_helper'
 
 module ActiveSupport
   class TestCase
+    # Add PasswordHelper to fixture set to make availble in users.yml
+    include PasswordHelper
+    ActiveRecord::FixtureSet.context_class.send :include, PasswordHelper
+
     # Run tests in parallel with specified workers
     parallelize(workers: :number_of_processors)
 
@@ -16,7 +21,7 @@ module ActiveSupport
       args = {
         credentials: {
           email: user.email,
-          password: user.password_digest
+          password: default_password
         }
       }
       Authentication::Mutations::Login.new(object: nil, field: nil, context: { session: {} }).resolve(args)
