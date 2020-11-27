@@ -29,22 +29,22 @@ module Mutations
         }
       )
 
-      assert result[:token].present?
-      assert_equal result[:user], user
+      assert(result[:token].present?)
+      assert_equal(result[:user], user)
     end
 
     test 'should not login without credentials' do
-      assert_nil perform
+      assert_nil(perform)
     end
 
     test 'should not login with wrong email' do
       create_user
-      assert_nil perform(credentials: { email: 'taylor@localhost.com' })
+      assert_nil(perform(credentials: { email: 'taylor@localhost.com' }))
     end
 
     test 'should not login with wrong password' do
       user = create_user
-      assert_nil perform(credentials: { email: user.email, password: 'a1B2c3D4e5F6g' })
+      assert_nil(perform(credentials: { email: user.email, password: 'a1B2c3D4e5F6g' }))
     end
   end
 end

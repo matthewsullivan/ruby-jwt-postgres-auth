@@ -34,10 +34,10 @@ module Mutations
       args = build_args(@user)
       result = perform(args)
 
-      assert result.persisted?
-      assert_equal result.first_name, @user[:first_name]
-      assert_equal result.last_name, @user[:last_name]
-      assert_equal result.email, @user[:email]
+      assert(result.persisted?)
+      assert_equal(result.first_name, @user[:first_name])
+      assert_equal(result.last_name, @user[:last_name])
+      assert_equal(result.email, @user[:email])
     end
 
     test 'should not register without first name' do

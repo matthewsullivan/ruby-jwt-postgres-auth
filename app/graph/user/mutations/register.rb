@@ -7,8 +7,8 @@ module User::Mutations
     end
 
     argument :auth_provider, AuthProviderSignupData, required: false
-    argument :first_name, String, required: true
     argument :last_name, String, required: true
+    argument :first_name, String, required: true
 
     type User::Types::UserType
 

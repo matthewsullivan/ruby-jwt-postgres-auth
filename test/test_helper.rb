@@ -7,14 +7,13 @@ require 'helpers/password_helper'
 
 module ActiveSupport
   class TestCase
-    # Add PasswordHelper to fixture set to make availble in users.yml
     include PasswordHelper
+    # Add PasswordHelper to fixture set to make availble in users.yml
     ActiveRecord::FixtureSet.context_class.send :include, PasswordHelper
 
     # Run tests in parallel with specified workers
     parallelize(workers: :number_of_processors)
 
-    # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
 
     def login_as(user)
