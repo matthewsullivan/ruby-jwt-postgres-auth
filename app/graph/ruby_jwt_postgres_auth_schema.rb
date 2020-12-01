@@ -7,4 +7,12 @@ class RubyJwtPostgresAuthSchema < GraphQL::Schema
   use GraphQL::Analysis::AST
   use GraphQL::Execution::Interpreter
   use GraphQL::Pagination::Connections
+
+  def self.id_from_object(object, type_definition, _query_ctx)
+    GraphQL::Schema::UniqueWithinType.encode(type_definition.name, object.id)
+  end
+
+  def self.object_from_id(id, _query_ctx)
+    type_name, item_id = GraphQL::Schema::UniqueWithinType.decode(id)
+  end
 end
