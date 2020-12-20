@@ -17,10 +17,7 @@ module Mutations
 
     def perform(args = {})
       result = login_as(users(:john))
-      context = {
-        session: { token: result[:token] },
-        current_user: result[:user]
-      }
+      context = { current_user: result[:user] }
       User::Mutations::UpdateUser.new(object: nil, field: nil, context: context).resolve(args)
     end
 

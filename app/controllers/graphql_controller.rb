@@ -1,19 +1,12 @@
 # frozen_string_literal: true
 
 class GraphqlController < ApplicationController
-  # If accessing from outside this domain, nullify the session
-  # This allows for outside API access while preventing CSRF attacks,
-  # but you'll have to authenticate your user separately
-  # protect_from_forgery with: :null_session
-
   def execute
     variables = prepare_variables(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
-    context = {
-      session: session,
-      current_user: current_user
-    }
+    token = variables&.dig(:input, :arguments, :token)
+    context = { current_user: current_user(token) }
     result = RubyJwtPostgresAuthSchema.execute(
       query,
       variables: variables,
@@ -29,17 +22,10 @@ class GraphqlController < ApplicationController
 
   private
 
-  # gets current user from token stored in the session
-  def current_user
-    # if we want to change the sign-in strategy, this is the place to do it
-    return unless session[:token]
+  def current_user(token)
+    return unless token
 
-    crypt = ActiveSupport::MessageEncryptor.new(Rails.application.credentials.secret_key_base.byteslice(0..31))
-    token = crypt.decrypt_and_verify session[:token]
-    user_id = token.gsub('user-id:', '').to_i
-    User.find(user_id)
-  rescue ActiveSupport::MessageVerifier::InvalidSignature
-    nil
+    JwtHelper.logged_in_user(token)
   end
 
   # Handle variables in form data, JSON body, or a blank value

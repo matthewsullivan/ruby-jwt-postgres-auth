@@ -10,16 +10,16 @@ module Authentication::Mutations
     def resolve(credentials: nil)
       return unless credentials
 
+      login_user(credentials)
+    end
+
+    private
+
+    def login_user(credentials)
       user = User.find_by(email: credentials[:email])
-      return unless user
-      return unless user.authenticate(credentials[:password])
+      return unless user&.authenticate(credentials[:password])
 
-      # Replace with JWT
-      crypt = ActiveSupport::MessageEncryptor.new(Rails.application.credentials.secret_key_base.byteslice(0..31))
-      token = crypt.encrypt_and_sign("user-id:#{user.id}")
-
-      context[:session][:token] = token
-
+      token = JwtHelper.encode_token({ user_id: user.id })
       { user: user, token: token }
     end
   end

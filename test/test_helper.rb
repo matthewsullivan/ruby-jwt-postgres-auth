@@ -23,7 +23,7 @@ module ActiveSupport
           password: default_password
         }
       }
-      Authentication::Mutations::Login.new(object: nil, field: nil, context: { session: {} }).resolve(args)
+      Authentication::Mutations::Login.new(object: nil, field: nil, context: {}).resolve(args)
     end
   end
 end

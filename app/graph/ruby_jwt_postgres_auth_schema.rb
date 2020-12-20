@@ -13,6 +13,6 @@ class RubyJwtPostgresAuthSchema < GraphQL::Schema
   end
 
   def self.object_from_id(id, _query_ctx)
-    type_name, item_id = GraphQL::Schema::UniqueWithinType.decode(id)
+    _type_name, _item_id = GraphQL::Schema::UniqueWithinType.decode(id)
   end
 end

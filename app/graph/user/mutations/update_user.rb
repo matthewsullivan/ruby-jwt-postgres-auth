@@ -10,7 +10,7 @@ module User::Mutations
       current_user = context[:current_user]
       return unless current_user
 
-      current_user.update!(arguments.to_hash)
+      current_user.update!(arguments.to_hash.except!(:token))
 
       { user: current_user }
     end
