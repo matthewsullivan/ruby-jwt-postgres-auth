@@ -35,7 +35,6 @@ module Mutations
       exception = assert_raises ActiveRecord::RecordInvalid do
         perform(arguments: { first_name: '' })
       end
-
       assert_equal("Validation failed: First name can't be blank", exception.message)
     end
 
@@ -43,7 +42,6 @@ module Mutations
       exception = assert_raises ActiveRecord::RecordInvalid do
         perform(arguments: { last_name: '' })
       end
-
       assert_equal("Validation failed: Last name can't be blank", exception.message)
     end
 
@@ -51,7 +49,6 @@ module Mutations
       exception = assert_raises ActiveRecord::RecordInvalid do
         perform(arguments: { email: '' })
       end
-
       assert_equal("Validation failed: Email can't be blank", exception.message)
     end
 
@@ -59,7 +56,6 @@ module Mutations
       exception = assert_raises ActiveRecord::RecordInvalid do
         perform(arguments: { email: 'janedoe@localhost.com' })
       end
-
       assert_equal('Validation failed: Email has already been taken', exception.message)
     end
   end

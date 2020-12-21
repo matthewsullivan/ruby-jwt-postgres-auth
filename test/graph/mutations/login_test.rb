@@ -11,7 +11,6 @@ module Mutations
         email: 'taylordoe@localhost.com',
         password: '(a1B2c3D4e5F6g)'
       }
-
       User.create!(user)
     end
 
@@ -21,16 +20,24 @@ module Mutations
 
     test 'should login with valid credentails' do
       user = create_user
-
       result = perform(
         credentials: {
           email: user.email,
           password: user.password
         }
       )
-
-      assert(result[:token].present?)
       assert_equal(result[:user], user)
+    end
+
+    test 'should login and return token' do
+      user = create_user
+      result = perform(
+        credentials: {
+          email: user.email,
+          password: user.password
+        }
+      )
+      assert(result[:token].present?)
     end
 
     test 'should not login without credentials' do
