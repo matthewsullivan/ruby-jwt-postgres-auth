@@ -7,7 +7,7 @@ module Base::Types
     end
 
     def user(id:)
-      _type, item_id = RubyJwtPostgresAuthSchema::object_from_id(id, nil)
+      _type, item_id = RubyJwtPostgresAuthSchema.object_from_id(id, nil)
       User.find(item_id)
     end
   end
