@@ -3,7 +3,6 @@
 module Authentication::Mutations
   class Login < Base::Mutations::BaseMutation
     argument :credentials, Authentication::Types::Input::AuthProviderCredentialsInput, required: false
-
     field :token, String, null: true
     field :user, User::Types::UserType, null: true
 
