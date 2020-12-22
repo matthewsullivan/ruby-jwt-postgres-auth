@@ -41,7 +41,8 @@ module Mutations
     end
 
     test 'should not login without credentials' do
-      assert_nil(perform)
+      result = perform(credentials: {})
+      assert_equal("Invalid credentials", result.message)
     end
 
     test 'should not login with wrong email' do
