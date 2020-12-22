@@ -16,10 +16,14 @@ module Authentication::Mutations
 
     def login_user(credentials)
       user = User.find_by(email: credentials[:email])
-      return unless user&.authenticate(credentials[:password])
+      raise StandardError unless user&.authenticate(credentials[:password])
 
       token = JwtHelper.encode_token({ user_id: user.id })
       { user: user, token: token }
+    rescue ActiveRecord::RecordNotFound => e
+      GraphQL::ExecutionError.new("Invalid input: #{e.record.errors.full_messages.join(', ')}")
+    rescue StandardError => e
+      GraphQL::ExecutionError.new('Invalid credentials')
     end
   end
 end
