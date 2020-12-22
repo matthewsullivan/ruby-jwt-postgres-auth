@@ -41,48 +41,43 @@ module Mutations
     end
 
     test 'should not register without first name' do
-      exception = assert_raises ActiveRecord::RecordInvalid do
-        @user[:first_name] = ''
-        args = build_args(@user)
-        perform(args)
-      end
-      assert_equal("Validation failed: First name can't be blank", exception.message)
+      @user[:first_name] = ''
+      args = build_args(@user)
+      result = perform(args)
+
+      assert_equal("Invalid input: First name can't be blank", result.message)
     end
 
     test 'should not register without last name' do
-      exception = assert_raises ActiveRecord::RecordInvalid do
-        @user[:last_name] = ''
-        args = build_args(@user)
-        perform(args)
-      end
-      assert_equal("Validation failed: Last name can't be blank", exception.message)
+      @user[:last_name] = ''
+      args = build_args(@user)
+      result = perform(args)
+
+      assert_equal("Invalid input: Last name can't be blank", result.message)
     end
 
     test 'should not register without email' do
-      exception = assert_raises ActiveRecord::RecordInvalid do
-        @user[:email] = ''
-        args = build_args(@user)
-        perform(args)
-      end
-      assert_equal("Validation failed: Email can't be blank", exception.message)
+      @user[:email] = ''
+      args = build_args(@user)
+      result = perform(args)
+
+      assert_equal("Invalid input: Email can't be blank", result.message)
     end
 
     test 'should not register without password' do
-      exception = assert_raises ActiveRecord::RecordInvalid do
-        @user[:password] = ''
-        args = build_args(@user)
-        perform(args)
-      end
-      assert_equal("Validation failed: Password can't be blank", exception.message)
+      @user[:password] = ''
+      args = build_args(@user)
+      result = perform(args)
+
+      assert_equal("Invalid input: Password can't be blank", result.message)
     end
 
     test 'should not register with duplicate email' do
-      exception = assert_raises ActiveRecord::RecordInvalid do
-        @user[:email] = 'johndoe@localhost.com'
-        args = build_args(@user)
-        perform(args)
-      end
-      assert_equal('Validation failed: Email has already been taken', exception.message)
+      @user[:email] = 'johndoe@localhost.com'
+      args = build_args(@user)
+      result = perform(args)
+
+      assert_equal('Invalid input: Email has already been taken', result.message)
     end
   end
 end
