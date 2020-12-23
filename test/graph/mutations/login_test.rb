@@ -42,19 +42,19 @@ module Mutations
 
     test 'should not login without credentials' do
       result = perform(credentials: {})
-      assert_equal("Invalid credentials", result.message)
+      assert_equal('Invalid credentials', result.message)
     end
 
     test 'should not login with wrong email' do
       create_user
       result = perform(credentials: { email: 'taylor@localhost.com' })
-      assert_equal("Invalid credentials", result.message)
+      assert_equal('Invalid credentials', result.message)
     end
 
     test 'should not login with wrong password' do
       user = create_user
       result = perform(credentials: { email: user.email, password: 'a1B2c3D4e5F6g' })
-      assert_equal("Invalid credentials", result.message)
+      assert_equal('Invalid credentials', result.message)
     end
   end
 end
