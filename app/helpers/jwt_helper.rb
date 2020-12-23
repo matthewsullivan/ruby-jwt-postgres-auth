@@ -14,6 +14,8 @@ module JwtHelper
 
       user_id = decoded_token[0]['user_id']
       User.find(user_id)
+    rescue ActiveRecord::RecordNotFound => e
+      GraphQL::ExecutionError.new(e.message)
     end
 
     private
@@ -21,7 +23,7 @@ module JwtHelper
     def decoded_token(token)
       JWT.decode(token, SECRET, true, algorithm: ENV['JWT_ALGORITHM'])
     rescue StandardError => e
-      puts e.message
+      GraphQL::ExecutionError.new(e.message)
       nil
     end
   end
