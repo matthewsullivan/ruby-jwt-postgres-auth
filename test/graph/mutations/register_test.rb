@@ -47,7 +47,6 @@ module Mutations
       parameters = build_parameters(@user)
       result = perform(parameters)
       user = result['data']['register']
-      # assert_equal('Must be logged in to access requested resource', result['errors'][0]['message'])
 
       assert_equal(user['email'], @user[:email])
       assert_equal(user['firstName'], @user[:first_name])

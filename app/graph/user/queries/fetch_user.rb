@@ -10,8 +10,8 @@ module User::Queries
       raise StandardError unless current_user
 
       _type, item_id = RubyJwtPostgresAuthSchema.object_from_id(arguments[:id], nil)
-      User.find(item_id)
-      { user: current_user }
+      user = User.find(item_id)
+      { user: user }
     rescue ActiveRecord::RecordNotFound => e
       GraphQL::ExecutionError.new("Invalid input: #{e.message}")
     rescue StandardError => e
