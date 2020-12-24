@@ -13,7 +13,7 @@ module User::Mutations
       { user: current_user }
     rescue ActiveRecord::RecordInvalid => e
       GraphQL::ExecutionError.new("Invalid input: #{e.record.errors.full_messages.join(', ')}")
-    rescue StandardError => e
+    rescue StandardError
       GraphQL::ExecutionError.new('Must be logged in to access requested resource')
     end
   end

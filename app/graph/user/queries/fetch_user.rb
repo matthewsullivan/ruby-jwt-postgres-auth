@@ -14,7 +14,7 @@ module User::Queries
       { user: user }
     rescue ActiveRecord::RecordNotFound => e
       GraphQL::ExecutionError.new("Invalid input: #{e.message}")
-    rescue StandardError => e
+    rescue StandardError
       GraphQL::ExecutionError.new('Must be logged in to access requested resource')
     end
   end

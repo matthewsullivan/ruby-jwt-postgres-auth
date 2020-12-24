@@ -12,7 +12,7 @@ module Authentication::Mutations
       login_user!(credentials)
     rescue ActiveRecord::RecordNotFound => e
       GraphQL::ExecutionError.new("Invalid input: #{e.message}")
-    rescue StandardError => e
+    rescue StandardError
       GraphQL::ExecutionError.new('Invalid credentials')
     end
 
