@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Mutations
-  class RegisterTest < ActiveSupport::TestCase
+  class RegisterTest < ActionDispatch::IntegrationTest
     def setup
       @user = {
         first_name: 'Taylor',
@@ -13,71 +13,85 @@ module Mutations
       }
     end
 
-    def build_args(user)
+    def build_parameters(user)
       {
-        first_name: user[:first_name],
-        last_name: user[:last_name],
-        auth_provider: {
-          credentials: {
-            email: user[:email],
-            password: user[:password]
+        input: {
+          firstName: user[:first_name],
+          lastName: user[:last_name],
+          authProvider: {
+            credentials: {
+              email: user[:email],
+              password: user[:password]
+            }
           }
         }
       }
     end
 
     def perform(args = {})
-      User::Mutations::Register.new(object: nil, field: nil, context: {}).resolve(args)
+      query = <<-GRAPHQL
+        mutation($input: RegisterInput!) {
+          register(input: $input) {
+            email
+            firstName
+            id
+            lastName
+          }
+        }
+      GRAPHQL
+      post '/graph', params: { query: query, variables: args }
+      JSON.parse(@response.body)
     end
 
     test 'should register valid user' do
-      args = build_args(@user)
-      result = perform(args)
+      parameters = build_parameters(@user)
+      result = perform(parameters)
+      user = result['data']['register']
+      # assert_equal('Must be logged in to access requested resource', result['errors'][0]['message'])
 
-      assert(result.persisted?)
-      assert_equal(result.first_name, @user[:first_name])
-      assert_equal(result.last_name, @user[:last_name])
-      assert_equal(result.email, @user[:email])
+      assert_equal(user['email'], @user[:email])
+      assert_equal(user['firstName'], @user[:first_name])
+      assert_equal(user['lastName'], @user[:last_name])
     end
 
     test 'should not register without first name' do
       @user[:first_name] = ''
-      args = build_args(@user)
-      result = perform(args)
+      parameters = build_parameters(@user)
+      result = perform(parameters)
 
-      assert_equal("Invalid input: First name can't be blank", result.message)
+      assert_equal("Invalid input: First name can't be blank", result['errors'][0]['message'])
     end
 
     test 'should not register without last name' do
       @user[:last_name] = ''
-      args = build_args(@user)
-      result = perform(args)
+      parameters = build_parameters(@user)
+      result = perform(parameters)
 
-      assert_equal("Invalid input: Last name can't be blank", result.message)
+      assert_equal("Invalid input: Last name can't be blank", result['errors'][0]['message'])
     end
 
     test 'should not register without email' do
       @user[:email] = ''
-      args = build_args(@user)
-      result = perform(args)
+      parameters = build_parameters(@user)
+      result = perform(parameters)
 
-      assert_equal("Invalid input: Email can't be blank", result.message)
+      assert_equal("Invalid input: Email can't be blank", result['errors'][0]['message'])
     end
 
     test 'should not register without password' do
       @user[:password] = ''
-      args = build_args(@user)
-      result = perform(args)
+      parameters = build_parameters(@user)
+      result = perform(parameters)
 
-      assert_equal("Invalid input: Password can't be blank", result.message)
+      assert_equal("Invalid input: Password can't be blank", result['errors'][0]['message'])
     end
 
     test 'should not register with duplicate email' do
       @user[:email] = 'johndoe@localhost.com'
-      args = build_args(@user)
-      result = perform(args)
+      parameters = build_parameters(@user)
+      result = perform(parameters)
 
-      assert_equal('Invalid input: Email has already been taken', result.message)
+      assert_equal('Invalid input: Email has already been taken', result['errors'][0]['message'])
     end
   end
 end

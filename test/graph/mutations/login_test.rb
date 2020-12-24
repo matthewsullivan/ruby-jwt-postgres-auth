@@ -3,7 +3,7 @@
 require 'test_helper'
 
 module Mutations
-  class LoginTest < ActiveSupport::TestCase
+  class LoginTest < ActionDispatch::IntegrationTest
     def create_user
       user = {
         first_name: 'Taylor',
@@ -14,47 +14,85 @@ module Mutations
       User.create!(user)
     end
 
+    def fetch_user(result)
+      user_id = result['data']['login']['user']['id']
+      _type, item_id = RubyJwtPostgresAuthSchema.object_from_id(user_id, nil)
+      User.find(item_id)
+    end
+
     def perform(args = {})
-      Authentication::Mutations::Login.new(object: nil, field: nil, context: {}).resolve(args)
+      query = <<-GRAPHQL
+        mutation ($input: LoginInput!) {
+          login (input: $input){
+            token
+            user {
+              email
+              firstName
+              id
+              lastName
+            }
+          }
+        }
+      GRAPHQL
+      post '/graph', params: { query: query, variables: args }
+      JSON.parse(@response.body)
     end
 
     test 'should login with valid credentails' do
-      user = create_user
-      result = perform(
-        credentials: {
-          email: user.email,
-          password: user.password
+      new_user = create_user
+      parameters = {
+        input: {
+          credentials: {
+            email: new_user.email,
+            password: new_user.password
+          }
         }
-      )
-      assert_equal(result[:user], user)
+      }
+      result = perform(parameters)
+      user = fetch_user(result)
+      assert_equal(user, new_user)
     end
 
     test 'should login and return token' do
-      user = create_user
-      result = perform(
-        credentials: {
-          email: user.email,
-          password: user.password
+      new_user = create_user
+      parameters = {
+        input: {
+          credentials: {
+            email: new_user.email,
+            password: new_user.password
+          }
         }
-      )
-      assert(result[:token].present?)
-    end
-
-    test 'should not login without credentials' do
-      result = perform(credentials: {})
-      assert_equal('Invalid credentials', result.message)
+      }
+      result = perform(parameters)
+      assert(result['data']['login']['token'].present?)
     end
 
     test 'should not login with wrong email' do
-      create_user
-      result = perform(credentials: { email: 'taylor@localhost.com' })
-      assert_equal('Invalid credentials', result.message)
+      new_user = create_user
+      parameters = {
+        input: {
+          credentials: {
+            email: 'taylor@localhost.com',
+            password: new_user.password
+          }
+        }
+      }
+      result = perform(parameters)
+      assert_equal('Invalid credentials', result['errors'][0]['message'])
     end
 
     test 'should not login with wrong password' do
-      user = create_user
-      result = perform(credentials: { email: user.email, password: 'a1B2c3D4e5F6g' })
-      assert_equal('Invalid credentials', result.message)
+      new_user = create_user
+      parameters = {
+        input: {
+          credentials: {
+            email: new_user.email,
+            password: 'a1B2c3D4e5F6g'
+          }
+        }
+      }
+      result = perform(parameters)
+      assert_equal('Invalid credentials', result['errors'][0]['message'])
     end
   end
 end
