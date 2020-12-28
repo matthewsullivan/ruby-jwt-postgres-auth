@@ -34,6 +34,7 @@ module Mutations
         }
       }
       result = perform(parameters)
+
       assert_equal('Must be logged in to access requested resource', result['errors'][0]['message'])
     end
 
@@ -67,6 +68,7 @@ module Mutations
         }
       }
       result = perform(parameters)
+
       assert_equal("Invalid input: First name can't be blank", result['errors'][0]['message'])
     end
 
@@ -80,6 +82,7 @@ module Mutations
         }
       }
       result = perform(parameters)
+
       assert_equal("Invalid input: Last name can't be blank", result['errors'][0]['message'])
     end
 
@@ -93,6 +96,7 @@ module Mutations
         }
       }
       result = perform(parameters)
+
       assert_equal("Invalid input: Email can't be blank", result['errors'][0]['message'])
     end
 
@@ -106,6 +110,7 @@ module Mutations
         }
       }
       result = perform(parameters)
+
       assert_equal('Invalid input: Email has already been taken', result['errors'][0]['message'])
     end
   end

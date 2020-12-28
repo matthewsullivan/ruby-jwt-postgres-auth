@@ -47,12 +47,13 @@ module Mutations
       parameters = {
         input: {
           arguments: {
-            id: '12344',
+            id: 'A1b2C3d4',
             token: ''
           }
         }
       }
       result = perform(parameters)
+
       assert_equal('Must be logged in to access requested resource', result['errors'][0]['message'])
     end
 
@@ -66,6 +67,7 @@ module Mutations
         }
       }
       result = perform(parameters)
+
       assert_equal("Invalid input: Couldn't find User without an ID", result['errors'][0]['message'])
     end
   end

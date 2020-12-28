@@ -50,6 +50,7 @@ module Mutations
       }
       result = perform(parameters)
       user = fetch_user(result)
+
       assert_equal(user, new_user)
     end
 
@@ -64,6 +65,7 @@ module Mutations
         }
       }
       result = perform(parameters)
+
       assert(result['data']['login']['token'].present?)
     end
 
@@ -78,6 +80,7 @@ module Mutations
         }
       }
       result = perform(parameters)
+
       assert_equal('Invalid credentials', result['errors'][0]['message'])
     end
 
@@ -92,6 +95,7 @@ module Mutations
         }
       }
       result = perform(parameters)
+
       assert_equal('Invalid credentials', result['errors'][0]['message'])
     end
   end
