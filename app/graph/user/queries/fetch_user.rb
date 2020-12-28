@@ -3,6 +3,7 @@
 module User::Queries
   class FetchUser < Base::Mutations::BaseMutation
     argument :arguments, User::Types::Input::FetchUser, required: true
+
     field :user, User::Types::UserType, null: true
 
     def resolve(arguments:)
@@ -10,8 +11,7 @@ module User::Queries
       raise StandardError unless current_user
 
       _type, item_id = RubyJwtPostgresAuthSchema.object_from_id(arguments[:id], nil)
-      user = User.find(item_id)
-      { user: user }
+      { user: User.find(item_id) }
     rescue ActiveRecord::RecordNotFound => e
       GraphQL::ExecutionError.new("Invalid input: #{e.message}")
     rescue StandardError

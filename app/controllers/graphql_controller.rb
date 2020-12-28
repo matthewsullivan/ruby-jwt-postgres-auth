@@ -28,7 +28,13 @@ class GraphqlController < ApplicationController
     JwtHelper.logged_in_user(token)
   end
 
-  # Handle variables in form data, JSON body, or a blank value
+  def handle_error_in_development(e)
+    logger.error(e.message)
+    logger.error(e.backtrace.join("\n"))
+
+    render json: { errors: [{ message: e.message, backtrace: e.backtrace }], data: {} }, status: 500
+  end
+
   def prepare_variables(variables_param)
     case variables_param
     when String
@@ -40,19 +46,11 @@ class GraphqlController < ApplicationController
     when Hash
       variables_param
     when ActionController::Parameters
-      variables_param.to_unsafe_hash # GraphQL-Ruby will validate name and type of incoming variables.
+      variables_param.to_unsafe_hash
     when nil
       {}
     else
       raise ArgumentError, "Unexpected parameter: #{variables_param}"
     end
-  end
-
-  def handle_error_in_development(e)
-    logger.error(e.message)
-    logger.error(e.backtrace.join("\n"))
-
-    # render json: { errors: [{ message: e.message, backtrace: e.backtrace }], data: {} }, status: 500
-    render json: { errors: [{ message: e.message }], data: {} }, status: 500
   end
 end
