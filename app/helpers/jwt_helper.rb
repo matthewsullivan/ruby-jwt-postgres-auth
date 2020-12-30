@@ -2,9 +2,10 @@
 
 module JwtHelper
   class << self
-    SECRET = ENV['RJPA_SECRET']
+    SECRET = ENV['JWT_SECRET']
 
     def encode_token(payload)
+      payload[:exp] = Time.now.to_i + ENV['JWT_EXPIRATION'].to_i
       JWT.encode(payload, SECRET)
     end
 
@@ -22,7 +23,7 @@ module JwtHelper
 
     def decoded_token(token)
       JWT.decode(token, SECRET, true, algorithm: ENV['JWT_ALGORITHM'])
-    rescue StandardError => e
+    rescue JWT::ExpiredSignature, StandardError => e
       GraphQL::ExecutionError.new(e.message)
       nil
     end

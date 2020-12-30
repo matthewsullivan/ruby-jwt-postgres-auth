@@ -23,7 +23,7 @@ module Authentication::Mutations
       user = User.find_by(email: credentials[:email])
       raise StandardError unless user&.authenticate(credentials[:password])
 
-      token = JwtHelper.encode_token({ user_id: user.id })
+      token = JwtHelper.encode_token({ email: user.email, user_id: user.id })
       { user: user, token: token }
     end
   end
