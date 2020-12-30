@@ -5,6 +5,5 @@ module User::Types::Input
     description 'Input for fetching a user'
 
     argument :id, String, required: true
-    argument :token, String, required: true
   end
 end

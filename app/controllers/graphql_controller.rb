@@ -5,8 +5,7 @@ class GraphqlController < ApplicationController
     variables = prepare_variables(params[:variables])
     query = params[:query]
     operation_name = params[:operationName]
-    token = variables&.dig(:input, :arguments, :token)
-    context = { current_user: current_user(token) }
+    context = { current_user: current_user }
     result = RubyJwtPostgresAuthSchema.execute(
       query,
       variables: variables,
@@ -22,8 +21,9 @@ class GraphqlController < ApplicationController
 
   private
 
-  def current_user(token)
-    return unless token
+  def current_user
+    token = request.headers['Authorization']&.split(' ')&.last
+    return if token.blank?
 
     JwtHelper.logged_in_user(token)
   end
