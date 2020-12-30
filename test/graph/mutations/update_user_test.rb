@@ -20,7 +20,7 @@ module Mutations
           }
         }
       GRAPHQL
-      post '/graph', params: { query: query, variables: args }
+      post '/graph', params: { query: query, variables: args }, headers: { 'HTTP_AUTHORIZATION' => "Bearer: #{@token}" }
       JSON.parse(@response.body)
     end
 
@@ -28,11 +28,11 @@ module Mutations
       parameters = {
         input: {
           arguments: {
-            email: 'janedoe@localhost.com',
-            token: ''
+            email: 'janedoe@localhost.com'
           }
         }
       }
+      @token = ''
       result = perform(parameters)
 
       assert_equal('Must be logged in to access requested resource', result['errors'][0]['message'])
@@ -45,8 +45,7 @@ module Mutations
             firstName: 'Jonathan',
             lastName: 'D.',
             email: 'jonathandoe@localhost.com',
-            password: '!a1B2c3D4e5F6g!',
-            token: @token
+            password: '!a1B2c3D4e5F6g!'
           }
         }
       }
@@ -62,8 +61,7 @@ module Mutations
       parameters = {
         input: {
           arguments: {
-            firstName: '',
-            token: @token
+            firstName: ''
           }
         }
       }
@@ -76,8 +74,7 @@ module Mutations
       parameters = {
         input: {
           arguments: {
-            lastName: '',
-            token: @token
+            lastName: ''
           }
         }
       }
@@ -90,8 +87,7 @@ module Mutations
       parameters = {
         input: {
           arguments: {
-            email: '',
-            token: @token
+            email: ''
           }
         }
       }
@@ -104,8 +100,7 @@ module Mutations
       parameters = {
         input: {
           arguments: {
-            email: 'janedoe@localhost.com',
-            token: @token
+            email: 'janedoe@localhost.com'
           }
         }
       }

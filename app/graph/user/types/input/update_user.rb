@@ -8,6 +8,5 @@ module User::Types::Input
     argument :first_name, String, required: false
     argument :last_name, String, required: false
     argument :password, String, required: false
-    argument :token, String, required: true
   end
 end

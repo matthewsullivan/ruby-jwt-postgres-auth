@@ -20,7 +20,7 @@ module Mutations
           }
         }
       GRAPHQL
-      post '/graph', params: { query: query, variables: args }
+      post '/graph', params: { query: query, variables: args }, headers: { 'HTTP_AUTHORIZATION' => "Bearer: #{@token}" }
       JSON.parse(@response.body)
     end
 
@@ -30,8 +30,7 @@ module Mutations
       parameters = {
         input: {
           arguments: {
-            id: encoded_id,
-            token: @token
+            id: encoded_id
           }
         }
       }
@@ -47,11 +46,11 @@ module Mutations
       parameters = {
         input: {
           arguments: {
-            id: 'A1b2C3d4',
-            token: ''
+            id: 'A1b2C3d4'
           }
         }
       }
+      @token = ''
       result = perform(parameters)
 
       assert_equal('Must be logged in to access requested resource', result['errors'][0]['message'])
@@ -61,8 +60,7 @@ module Mutations
       parameters = {
         input: {
           arguments: {
-            id: '124',
-            token: @token
+            id: 'A1b2C3d4'
           }
         }
       }
