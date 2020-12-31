@@ -90,7 +90,15 @@ module Mutations
       parameters = build_parameters(@user)
       result = perform(parameters)
 
-      assert_equal("Invalid input: Password can't be blank", result['errors'][0]['message'])
+      assert_equal("Invalid input: Password can't be blank, Password is too short (minimum is 6 characters)", result['errors'][0]['message'])
+    end
+
+    test 'should not register with short password' do
+      @user[:password] = '(a1)'
+      parameters = build_parameters(@user)
+      result = perform(parameters)
+
+      assert_equal("Invalid input: Password is too short (minimum is 6 characters)", result['errors'][0]['message'])
     end
 
     test 'should not register with duplicate email' do
