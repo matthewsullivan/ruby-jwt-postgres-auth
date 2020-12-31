@@ -2121,6 +2121,8 @@ Metrics/BlockNesting:
 Metrics/ClassLength:
   Description: "Avoid classes longer than 100 lines of code."
   Enabled: true
+  Exclude:
+    - "test/**/*"
   VersionAdded: "0.25"
   VersionChanged: "0.87"
   CountComments: false # count full line comments?
