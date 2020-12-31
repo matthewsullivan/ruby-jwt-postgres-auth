@@ -74,7 +74,15 @@ module Mutations
       parameters = build_parameters(@user)
       result = perform(parameters)
 
-      assert_equal("Invalid input: Email can't be blank", result['errors'][0]['message'])
+      assert_equal("Invalid input: Email invalid format, Email can't be blank", result['errors'][0]['message'])
+    end
+
+    test 'should not register without valid email' do
+      @user[:email] = 'taylorlocalhost'
+      parameters = build_parameters(@user)
+      result = perform(parameters)
+
+      assert_equal('Invalid input: Email invalid format', result['errors'][0]['message'])
     end
 
     test 'should not register without password' do

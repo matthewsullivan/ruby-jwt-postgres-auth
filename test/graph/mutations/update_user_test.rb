@@ -93,7 +93,7 @@ module Mutations
       }
       result = perform(parameters)
 
-      assert_equal("Invalid input: Email can't be blank", result['errors'][0]['message'])
+      assert_equal("Invalid input: Email invalid format, Email can't be blank", result['errors'][0]['message'])
     end
 
     test 'should not update with pre-existing email' do
@@ -107,6 +107,19 @@ module Mutations
       result = perform(parameters)
 
       assert_equal('Invalid input: Email has already been taken', result['errors'][0]['message'])
+    end
+
+    test 'should not update without valid email' do
+      parameters = {
+        input: {
+          arguments: {
+            email: 'janedoelocalhost'
+          }
+        }
+      }
+      result = perform(parameters)
+
+      assert_equal('Invalid input: Email invalid format', result['errors'][0]['message'])
     end
   end
 end
