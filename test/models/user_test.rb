@@ -41,6 +41,14 @@ class UserTest < ActiveSupport::TestCase
     assert_not_nil(user.errors[:email], 'duplicate email present')
   end
 
+  test 'should not create without valid email' do
+    @user[:email] = 'johndoelocalhost'
+    user = User.create(@user)
+
+    refute(user.valid?)
+    assert_equal(user.errors[:email][0], 'invalid format')
+  end
+
   test 'should not create without password' do
     user = User.new(first_name: @user[:first_name])
 
