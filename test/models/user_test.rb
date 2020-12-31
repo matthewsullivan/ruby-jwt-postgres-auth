@@ -55,4 +55,12 @@ class UserTest < ActiveSupport::TestCase
     refute(user.valid?)
     assert_not_nil(user.errors[:password], 'no password present')
   end
+
+  test 'should not create with short password' do
+    @user[:password] = '(a1)'
+    user = User.create(@user)
+
+    refute(user.valid?)
+    assert_equal(user.errors[:password][0], 'is too short (minimum is 6 characters)')
+  end
 end

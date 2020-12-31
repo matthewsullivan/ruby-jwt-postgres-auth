@@ -5,6 +5,7 @@ require 'graphql'
 module Mutations
   class UpdateUserTest < ActionDispatch::IntegrationTest
     def setup
+      @password = '!a1B2c3D4e5F6g!'
       @token = login_as(users(:john))[:token]
     end
 
@@ -45,7 +46,7 @@ module Mutations
             firstName: 'Jonathan',
             lastName: 'D.',
             email: 'jonathandoe@localhost.com',
-            password: '!a1B2c3D4e5F6g!'
+            password: @password
           }
         }
       }
@@ -61,7 +62,8 @@ module Mutations
       parameters = {
         input: {
           arguments: {
-            firstName: ''
+            firstName: '',
+            password: @password
           }
         }
       }
@@ -74,7 +76,8 @@ module Mutations
       parameters = {
         input: {
           arguments: {
-            lastName: ''
+            lastName: '',
+            password: @password
           }
         }
       }
@@ -87,7 +90,8 @@ module Mutations
       parameters = {
         input: {
           arguments: {
-            email: ''
+            email: '',
+            password: @password
           }
         }
       }
@@ -100,7 +104,8 @@ module Mutations
       parameters = {
         input: {
           arguments: {
-            email: 'janedoe@localhost.com'
+            email: 'janedoe@localhost.com',
+            password: @password
           }
         }
       }
@@ -113,13 +118,40 @@ module Mutations
       parameters = {
         input: {
           arguments: {
-            email: 'janedoelocalhost'
+            email: 'janedoelocalhost',
+            password: @password
           }
         }
       }
       result = perform(parameters)
 
       assert_equal('Invalid input: Email invalid format', result['errors'][0]['message'])
+    end
+
+    test 'should not update without password' do
+      parameters = {
+        input: {
+          arguments: {
+            password: ''
+          }
+        }
+      }
+      result = perform(parameters)
+
+      assert_equal("Invalid input: Password is too short (minimum is 6 characters)", result['errors'][0]['message'])
+    end
+
+    test 'should not update with short password' do
+      parameters = {
+        input: {
+          arguments: {
+            password: '(a1)'
+          }
+        }
+      }
+      result = perform(parameters)
+
+      assert_equal("Invalid input: Password is too short (minimum is 6 characters)", result['errors'][0]['message'])
     end
   end
 end
