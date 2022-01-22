@@ -10,5 +10,5 @@
     "webpack-dev-server": "^3.11.0"
   },
   "name": "ruby_jwt_postgres_auth",
-  "version": "1.0.2"
+  "version": "1.0.3"
 }
